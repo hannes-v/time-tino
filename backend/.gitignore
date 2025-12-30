@@ -1,0 +1,36 @@
+# ###########################################################
+# PYTHON / POETRY BACKEND .gitignore
+# ###########################################################
+
+# Byte-compiled / optimierter Code
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtuelle Umgebungen (auch wenn Poetry sie oft zentral speichert)
+.venv/
+venv/
+ENV/
+
+# Datenbanken (Lokal)
+*.db
+*.sqlite3
+
+# Poetry spezifisch
+# Wir behalten poetry.lock und pyproject.toml, aber ignorieren ggf. Cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Distribution / Build
+dist/
+build/
+*.egg-info/
+
+# Umgebungsvariablen (Geheimnisse)
+.env
+.env.local
+
+# IDE-spezifisch
+.vscode/
+.idea/

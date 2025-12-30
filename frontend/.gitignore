@@ -1,0 +1,45 @@
+# ###########################################################
+# ANGULAR FRONTEND .gitignore
+# ###########################################################
+
+# Abhängigkeiten (Niemals ins Git!)
+node_modules/
+
+# Angular Cache und Build-Outputs
+.angular/
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# IDE & Editor spezifische Files
+# (Häufig im Root, aber sicherheitshalber auch hier)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Betriebssystem-spezifische Dateien
+.DS_Store
+Thumbs.db
+
+# Logs & Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Testing
+/coverage
+/test-results
+
+# Lokale Umgebungsvariablen
+.env
+.env.local
