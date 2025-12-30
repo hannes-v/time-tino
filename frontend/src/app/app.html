@@ -1,6 +1,6 @@
 <section>
   <app-timeinput></app-timeinput>
-  @for(item of getItems(); track item.id) {
+  @for(item of allItems(); track item.id) {
     <app-listentry [item]="item"></app-listentry>
     <hr>
   }

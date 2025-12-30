@@ -110,6 +110,7 @@ async def update_item(item_id: int, item: ItemUpdate, db: Session = Depends(get_
     db.refresh(db_item)
     return db_item
 
+
 # get all items
 @app.get("/items/", response_model=list[ItemResponse])
 async def read_items(db: Session = Depends(get_db)):
