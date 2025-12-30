@@ -1,0 +1,9 @@
+<form [class]="timerRunning ? 'running' : 'paused'">
+  <label for="tags">Choose a tag to work on:</label>
+  <select name="tags" id="tags" [(ngModel)]="selectedTag">
+    @for(tag of getTags(); track tag) {
+      <option value="{{ tag }}">{{ tag }}</option>
+    }
+  </select>
+  <button type="button" (click)="timerButtonClicked()">{{ timerRunning ? "Stop Timer" : "Start New Timer" }}</button>
+</form>

@@ -1,0 +1,15 @@
+.running {
+	background-color: lightgreen;
+	transition: background-color 1.5s ease;
+}
+
+.paused {
+	background-color: lightsalmon;
+	transition: background-color 0.2s ease;
+}
+
+form {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
