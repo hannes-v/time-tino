@@ -4,4 +4,9 @@
     <app-listentry [item]="item"></app-listentry>
     <hr>
   }
+  <app-overlay dialogTitle="Greetings, one and all!">
+  <form>
+    <button (click)="closeDialog()">Close dialog</button>
+  </form>
+</app-overlay>
 </section>
