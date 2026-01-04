@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { Component, Input, inject } from "@angular/core";
+import { Router } from "@angular/router";
 import type { Item } from "../item";
 import { calculateItemDuration } from "../item-utils";
 
@@ -13,10 +14,11 @@ import { calculateItemDuration } from "../item-utils";
 export class Listentry {
 	editOverlayVisible: boolean = false;
 	@Input() item!: Item;
+	router = inject(Router);
 
 	showOverlay(): void {
 		console.log("Showing overlay for item", this.item.id);
-		this.editOverlayVisible = true;
+		this.router.navigate([""]);
 	}
 
 	get duration(): number | null {

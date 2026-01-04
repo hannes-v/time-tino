@@ -1,6 +1,6 @@
-<dialog #customdialog>
-  <p>Greetings, one and all!</p>
-  <form method="dialog">
-    <button onclick="closeDialog()">Close dialog</button>
-  </form>
+<dialog #appDialog >
+  <h1 >{{dialogTitle}}</h1>
+
+  <p>close me, i'm id: {{id()}}</p>
+  <button type="button" (click)="close()">Close</button>
 </dialog>

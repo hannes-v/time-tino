@@ -1,12 +1,8 @@
-<section>
-  <app-timeinput></app-timeinput>
+<app-timeinput></app-timeinput>
   @for(item of allItems(); track item.id) {
     <app-listentry [item]="item"></app-listentry>
     <hr>
   }
-  <app-overlay dialogTitle="Greetings, one and all!">
-  <form>
-    <button (click)="closeDialog()">Close dialog</button>
-  </form>
-</app-overlay>
-</section>
+  <a [routerLink]="['delete', 2]">move to deletion</a>
+<router-outlet></router-outlet>
+<router-outlet name="modal"></router-outlet>

@@ -1,5 +1,10 @@
 import { Component, inject, signal } from "@angular/core";
-import { Router, RouterOutlet } from "@angular/router";
+import {
+	Router,
+	RouterLink,
+	RouterLinkWithHref,
+	RouterOutlet,
+} from "@angular/router";
 import type { Item } from "./item";
 // biome-ignore lint/style/useImportType: <explanation>
 import { ItemService } from "./item-utils";
@@ -9,7 +14,14 @@ import { Timeinput } from "./timeinput/timeinput";
 
 @Component({
 	selector: "app-root",
-	imports: [RouterOutlet, Listentry, Timeinput, Overlay],
+	imports: [
+		RouterOutlet,
+		Listentry,
+		Timeinput,
+		Overlay,
+		RouterLinkWithHref,
+		RouterLink,
+	],
 	templateUrl: "./app.html",
 	styleUrl: "./app.css",
 })
@@ -32,25 +44,8 @@ export class App {
 		});
 	}
 
-	isModalOpen = signal(true);
-
-	// Saubere Methoden für die Logik
-	showOverlay() {
-		this.isModalOpen.set(true);
-	}
-
-	hideOverlay() {
-		this.isModalOpen.set(false);
-	}
-
-	/**
-	 * @deprecated Use allItems signal directly instead
-	 */
-	getItems(): Item[] {
-		return this.allItems();
-	}
-
-	closeDialog() {
+	closethatDialog() {
+		console.log("Closing dialog");
 		this.router.navigate(["/"]);
 	}
 }

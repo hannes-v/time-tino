@@ -5,10 +5,12 @@ import {
 	EventEmitter,
 	Input,
 	inject,
+	input,
 	type OnInit,
 	Output,
 	ViewChild,
 } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-overlay",
@@ -20,18 +22,23 @@ import {
 export class Overlay implements OnInit {
 	@Input("isOpen") isVisible = false;
 	@Input() dialogTitle!: string;
-	@ViewChild("customdialog", { static: true })
+	@ViewChild("appDialog", { static: true })
 	dialog!: ElementRef<HTMLDialogElement>;
-	// TODO: investigate why this is needed
-	cdr = inject(ChangeDetectorRef);
+	router = inject(Router);
+
+	id = input.required<string>();
+
+	close() {
+		this.dialog.nativeElement.close();
+		this.router.navigate(["/"]);
+	}
 
 	ngOnInit(): void {
 		this.dialog.nativeElement.showModal();
-		this.cdr.detectChanges();
 	}
 
 	ngOnDestroy(): void {
 		this.dialog.nativeElement.close();
-		this.cdr.detectChanges();
+		this.router.navigate(["/"]);
 	}
 }

@@ -2,6 +2,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import type { Observable } from "rxjs";
+import { of } from "rxjs";
 import type { Item } from "./item";
 
 export function calculateItemDuration(item: Item): number | null {
@@ -17,9 +18,21 @@ export class ItemService {
 
 	constructor(private http: HttpClient) {}
 
-	getItems() {
-		return this.http.get<Item[]>(this.apiUrl);
+	getItems(): Observable<Item[]> {
+		return of([
+			{ id: 1, tag: "Sample Item", startedAt: new Date(), endedAt: new Date() },
+			{
+				id: 2,
+				tag: "Another Item",
+				startedAt: new Date(),
+				endedAt: null,
+			},
+		]);
 	}
+
+	// getItems() {
+	// 	return this.http.get<Item[]>(this.apiUrl);
+	// }
 
 	deleteItem(id: number): Observable<void> {
 		// TODO: Implement deleteItem method
