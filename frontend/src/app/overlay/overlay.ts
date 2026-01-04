@@ -1,18 +1,21 @@
 import {
-	ChangeDetectorRef,
 	Component,
 	type ElementRef,
-	EventEmitter,
+	effect,
 	Input,
 	inject,
 	input,
+	type OnDestroy,
 	type OnInit,
-	Output,
-	type Signal,
 	ViewChild,
+	viewChild,
 } from "@angular/core";
-import { Router } from "@angular/router";
+import { toObservable, toSignal } from "@angular/core/rxjs-interop";
+import { ActivatedRoute, Router } from "@angular/router";
+import { catchError, type Observable, of, switchMap } from "rxjs";
 import type { Item } from "../item";
+// biome-ignore lint/style/useImportType: <explanation>
+import { ItemService } from "../item-utils";
 
 @Component({
 	selector: "app-overlay",
@@ -21,37 +24,63 @@ import type { Item } from "../item";
 	templateUrl: "./overlay.html",
 	styleUrls: ["./overlay.css"],
 })
-export class Overlay implements OnInit {
-	@Input("isOpen") isVisible = false;
-	@Input() dialogTitle!: string;
-	@ViewChild("appDialog", { static: true })
-	dialog!: ElementRef<HTMLDialogElement>;
-	router = inject(Router);
+export class Overlay implements OnDestroy {
+	// Services
+	private itemService = inject(ItemService);
+	private router = inject(Router);
 
-	id: Signal<string> = input.required<string>();
+	// Inputs
+	readonly id = input<number | null>(null);
+	readonly dialogTitle = input<string>("Item Dialog");
 
-	//itemData: Item | null = id() ? getItemById(id()) : null;
+	private dialogEl = viewChild<ElementRef<HTMLDialogElement>>("appDialog");
+
+	item = toSignal(
+		toObservable(this.id).pipe(
+			switchMap((id) => (id ? this.itemService.getItemById(+id) : of(null))),
+			catchError((err) => {
+				console.error("Fehler beim Laden:", err);
+				return of(null);
+			}),
+		),
+	);
+
+	constructor() {
+		// Ein Effekt reagiert automatisch, wenn das dialogEl verfügbar ist
+		effect(() => {
+			const el = this.dialogEl()?.nativeElement;
+			if (el) {
+				el.showModal();
+			}
+		});
+	}
 
 	getTags() {
 		return ["work", "exercise", "leisure", "other"];
 	}
 
-	onDelete() {}
-	onSave() {}
-	onClose() {
-		this.dialog.nativeElement.close();
-		this.router.navigate(["/"]);
+	onDelete() {
+		const currentItem = this.item();
+		if (currentItem) {
+			this.itemService.deleteItem(currentItem);
+			this.onClose();
+		}
+	}
+	onSave() {
+		const currentItem = this.item();
+		if (currentItem) {
+			this.itemService.updateItem(currentItem);
+			this.onClose();
+		}
 	}
 
-	ngOnInit(): void {
-		this.dialog.nativeElement.showModal();
+	onClose() {
+		this.dialogEl()?.nativeElement.close();
+		this.router.navigate(["/"]);
 	}
 
 	ngOnDestroy(): void {
-		this.dialog.nativeElement.close();
+		this.dialogEl()?.nativeElement.close();
 		this.router.navigate(["/"]);
 	}
-}
-function getItemById(arg0: string): Item | null {
-	throw new Error("Function not implemented.");
 }

@@ -39,11 +39,15 @@ export class ItemService {
 		});
 	}
 
+	updateItem(item: Item): Observable<Item> {
+		return of(item);
+	}
+
 	// getItems() {
 	// 	return this.http.get<Item[]>(this.apiUrl);
 	// }
 
-	deleteItem(id: number): Observable<void> {
+	deleteItem(item: Item): Observable<void> {
 		// TODO: Implement deleteItem method
 		throw new Error("Method not implemented.");
 		// return this.http.delete<void>(`${this.apiUrl}${id}/`);

@@ -1,5 +1,5 @@
 <dialog #appDialog >
-  <h1>Entry #{{id()}}</h1>
+  <h1>Entry #{{id() || "New Entry"}}</h1>
 
   <div>
       <label for="start-time">Start:</label>
