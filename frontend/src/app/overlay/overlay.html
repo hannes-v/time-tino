@@ -1,6 +1,36 @@
 <dialog #appDialog >
-  <h1 >{{dialogTitle}}</h1>
+  <h1>Entry #{{id()}}</h1>
 
-  <p>close me, i'm id: {{id()}}</p>
-  <button type="button" (click)="close()">Close</button>
+  <div>
+      <label for="start-time">Start:</label>
+      <input
+      type="datetime-local"
+      id="start-time"
+      name="start-time"
+      value="2018-06-12T19:30" />
+    </div>
+
+    <div>
+      <label for="end-time">Ende:</label>
+      <input
+      type="datetime-local"
+      id="end-time"
+      name="end-time"
+      value="2018-06-12T19:30" />
+    </div>
+
+    <div>
+        <label for="tags">Tag:</label>
+        <select name="tags" id="tags">
+            @for(tag of getTags(); track tag) {
+                <option value="{{ tag }}">{{ tag }}</option>
+            }
+        </select>
+    </div>
+
+    <hr>
+
+  <button type="button" (click)="onDelete()">Delete</button>
+  <button type="button" (click)="onClose()">Close</button>
+  <button type="button" (click)="onSave()">Save</button>
 </dialog>

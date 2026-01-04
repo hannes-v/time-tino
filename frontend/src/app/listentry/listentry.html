@@ -8,6 +8,6 @@
   <div>
     <p>Duration: {{ duration ? (duration / 1000 / 60 | number:'1.0-0') + ' minutes' : 'Ongoing' }}</p>
   </div>
-  
-  <button type="button" (click)="showOverlay()">Remove Entry</button>
+
+  <button type="button"><a [routerLink]="['/delete', item.id]">show dialog</a></button>
 </div>

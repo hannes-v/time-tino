@@ -30,6 +30,15 @@ export class ItemService {
 		]);
 	}
 
+	getItemById(id: number): Observable<Item> {
+		return of({
+			id: 1,
+			tag: "Sample Item",
+			startedAt: new Date(),
+			endedAt: new Date(),
+		});
+	}
+
 	// getItems() {
 	// 	return this.http.get<Item[]>(this.apiUrl);
 	// }
