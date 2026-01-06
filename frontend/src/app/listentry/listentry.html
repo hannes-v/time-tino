@@ -1,13 +1,11 @@
-<div class="listentry">
-  <div class="flex-row">
-    <p>ID: {{ item.id }}</p>
-    <p>Tag: {{ item.tag }}</p>
+<li class="list-row content-center">
+    <p class="text-xl">{{ item.tag }}</p>
     <p>Started At: {{ item.startedAt | date:'short' }}</p>
     <p>Ended At: {{ item.endedAt | date:'short' }}</p>
-  </div>
+  
   <div>
     <p>Duration: {{ duration ? (duration / 1000 / 60 | number:'1.0-0') + ' minutes' : 'Ongoing' }}</p>
   </div>
 
-  <button type="button" class="btn-info"><a [routerLink]="['/delete', item.id]">show dialog</a></button>
-</div>
+  <button type="button" class="btn btn-soft"><a [routerLink]="['/delete', item.id]">show dialog</a></button>
+</li>

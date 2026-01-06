@@ -1,9 +1,12 @@
 <app-timeinput></app-timeinput>
+<ul class="list">
+
   @for(item of allItems(); track item.id) {
     <app-listentry [item]="item"></app-listentry>
-    <hr>
+    
   }
-  <a [routerLink]="['delete', 2]">move to deletion</a>
+</ul>
+  <a [routerLink]="['delete', 2]" class="primary">move to deletion</a>
 <router-outlet></router-outlet>
 <router-outlet name="modal"></router-outlet>
 

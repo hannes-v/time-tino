@@ -1,36 +1,43 @@
-<dialog #appDialog >
-  <h1>Entry #{{id() || "New Entry"}}</h1>
+<dialog #appDialog class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
 
-  <div>
-      <label for="start-time">Start:</label>
-      <input
-      type="datetime-local"
-      id="start-time"
-      name="start-time"
-      value="2018-06-12T19:30" />
+        <h1>Entry #{{id() || "New Entry"}}</h1>
+        
+            <label class="input">
+                <span class="label w-20">Start</span>
+                <input
+                type="datetime-local"
+                id="start-time"
+                name="start-time"
+                value="2018-06-12T19:30" />
+            </label>
+        
+        
+        <label class="input">
+                <span class="label w-20">End</span>
+                <input
+                type="datetime-local"
+                id="end-time"
+                name="end-time"
+                value="2018-06-12T19:30" />
+            </label>
+        
+        
+            <label class="select">
+                <span class="label w-20">Tag
+                </span>
+                    <select name="tags" id="tags">
+                        @for(tag of getTags(); track tag) {
+                            <option value="{{ tag }}">{{ tag }}</option>
+                        }
+                    </select>
+            </label>
+        
+        
+        <hr>
+        
+        <button class="btn" type="button" (click)="onDelete()">Delete</button>
+        <button class="btn" type="button" (click)="onClose()">Close</button>
+        <button class="btn" type="button" (click)="onSave()">Save</button>
     </div>
-
-    <div>
-      <label for="end-time">Ende:</label>
-      <input
-      type="datetime-local"
-      id="end-time"
-      name="end-time"
-      value="2018-06-12T19:30" />
-    </div>
-
-    <div>
-        <label for="tags">Tag:</label>
-        <select name="tags" id="tags">
-            @for(tag of getTags(); track tag) {
-                <option value="{{ tag }}">{{ tag }}</option>
-            }
-        </select>
-    </div>
-
-    <hr>
-
-  <button type="button" (click)="onDelete()">Delete</button>
-  <button type="button" (click)="onClose()">Close</button>
-  <button type="button" (click)="onSave()">Save</button>
 </dialog>
