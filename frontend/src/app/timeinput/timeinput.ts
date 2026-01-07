@@ -8,7 +8,7 @@ import { timer } from "rxjs";
 	standalone: true,
 	imports: [FormsModule],
 	templateUrl: "./timeinput.html",
-	styleUrls: ["./timeinput.css"],
+	styleUrls: [],
 })
 export class Timeinput {
 	private tags = ["work", "exercise", "leisure", "other"];

@@ -23,7 +23,7 @@ import { Timeinput } from "./timeinput/timeinput";
 		RouterLink,
 	],
 	templateUrl: "./app.html",
-	styleUrl: "./app.css",
+	styleUrls: [],
 })
 export class App {
 	protected readonly title = signal("time-tino");

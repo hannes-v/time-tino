@@ -22,7 +22,7 @@ import { ItemService } from "../item-utils";
 	standalone: true,
 	imports: [],
 	templateUrl: "./overlay.html",
-	styleUrls: ["./overlay.css"],
+	styleUrls: [],
 })
 export class Overlay implements OnDestroy {
 	// Services
