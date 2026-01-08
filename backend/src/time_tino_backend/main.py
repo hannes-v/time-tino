@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import FileResponse
-from sqlalchemy import DateTime, create_engine, Column, Integer, String, func
+from sqlalchemy import DateTime, create_engine, Column, Integer, String, func, ForeignKey
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker, Session, relationship
 from pydantic import BaseModel
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
@@ -54,7 +54,9 @@ def getTimestamp():
 class Item(Base):
     __tablename__ = "items"
     id = Column(Integer, primary_key=True, index=True)
-    tag = Column(String, index=True)
+    # Reference to tag by id
+    tag_id = Column(Integer, ForeignKey("tags.id"), nullable=False, index=True)
+    tag = relationship("Tag", back_populates="items")
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     ended_at = Column(DateTime(timezone=True), nullable=True, server_default=None)
 
@@ -67,6 +69,16 @@ class Item(Base):
 
 Base.metadata.create_all(bind=engine)
 
+# Tag model
+class Tag(Base):
+    __tablename__ = "tags"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True, nullable=False)
+    items = relationship("Item", back_populates="tag")
+
+# ensure tables exist in correct order
+Base.metadata.create_all(bind=engine)
+
 def get_db():
     db = SessionLocal()
     try:
@@ -75,27 +87,44 @@ def get_db():
         db.close()
 
 class ItemCreate(BaseModel):
-    tag: str
+    tag_id: int
 
 class ItemUpdate(BaseModel):
-    tag: str
+    tag_id: int
     started_at: datetime
     ended_at: datetime | None = None
 
 class ItemResponse(BaseModel):
     id: int
-    tag: str
+    tag_id: int
     started_at: datetime
     ended_at: datetime | None = None
+
+
+class TagCreate(BaseModel):
+    name: str
+
+
+class TagResponse(BaseModel):
+    id: int
+    name: str
+
+class tag():
+    id: int
+    name: str
 
 # create new item
 @app.post("/items/", response_model=ItemResponse)
 async def create_item(item: ItemCreate, db: Session = Depends(get_db)):
-    db_item = Item(tag=item.tag, started_at=datetime.now(timezone.utc))
+    # ensure tag exists
+    tag = db.query(Tag).filter(Tag.id == item.tag_id).first()
+    if tag is None:
+        raise HTTPException(status_code=404, detail="Tag not found")
+    db_item = Item(tag_id=item.tag_id, started_at=datetime.now(timezone.utc))
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
-    return db_item
+    return ItemResponse(id=db_item.id, tag_id=db_item.tag_id, started_at=db_item.started_at, ended_at=db_item.ended_at)
 
 # update item by id
 @app.post("/items/{item_id}", response_model=ItemResponse)
@@ -103,19 +132,56 @@ async def update_item(item_id: int, item: ItemUpdate, db: Session = Depends(get_
     db_item = db.query(Item).filter(Item.id == item_id).first()
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
-    db_item.tag = item.tag
+    # ensure tag exists
+    tag = db.query(Tag).filter(Tag.id == item.tag_id).first()
+    if tag is None:
+        raise HTTPException(status_code=404, detail="Tag not found")
+    db_item.tag_id = item.tag_id
     db_item.started_at = item.started_at
     db_item.ended_at = item.ended_at
     db.commit()
     db.refresh(db_item)
-    return db_item
+    return ItemResponse(id=db_item.id, tag_id=db_item.tag_id, started_at=db_item.started_at, ended_at=db_item.ended_at)
 
 
 # get all items
 @app.get("/items/", response_model=list[ItemResponse])
 async def read_items(db: Session = Depends(get_db)):
     items = db.query(Item).order_by(Item.started_at.desc()).all()
-    return items
+    return [ItemResponse(id=i.id, tag_id=i.tag_id, started_at=i.started_at, ended_at=i.ended_at) for i in items]
+
+
+# Tags endpoints
+@app.get("/tags", response_model=list[TagResponse])
+async def read_tags(db: Session = Depends(get_db)):
+    tags = db.query(Tag).order_by(Tag.name).all()
+    return [TagResponse(id=t.id, name=t.name) for t in tags]
+
+
+@app.post("/tags", response_model=TagResponse)
+async def create_tag(tag: TagCreate, db: Session = Depends(get_db)):
+    existing = db.query(Tag).filter(Tag.name == tag.name).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Tag already exists")
+    db_tag = Tag(name=tag.name)
+    db.add(db_tag)
+    db.commit()
+    db.refresh(db_tag)
+    return TagResponse(id=db_tag.id, name=db_tag.name)
+
+
+@app.delete("/tags/{tag_id}", status_code=204)
+async def delete_tag(tag_id: int, db: Session = Depends(get_db)):
+    db_tag = db.query(Tag).filter(Tag.id == tag_id).first()
+    if db_tag is None:
+        raise HTTPException(status_code=404, detail="Tag not found")
+    # prevent deletion if items reference this tag
+    linked = db.query(Item).filter(Item.tag_id == tag_id).first()
+    if linked:
+        raise HTTPException(status_code=400, detail="Tag is in use by items")
+    db.delete(db_tag)
+    db.commit()
+    return None
 
 
 @app.delete("/items/{item_id}", status_code=204)
