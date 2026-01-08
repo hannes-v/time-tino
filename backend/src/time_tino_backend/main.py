@@ -117,6 +117,16 @@ async def read_items(db: Session = Depends(get_db)):
     items = db.query(Item).order_by(Item.started_at.desc()).all()
     return items
 
+
+@app.delete("/items/{item_id}", status_code=204)
+async def delete_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = db.query(Item).filter(Item.id == item_id).first()
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    db.delete(db_item)
+    db.commit()
+    return None
+
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 
