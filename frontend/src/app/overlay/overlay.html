@@ -1,7 +1,7 @@
 <dialog #appDialog class="modal modal-bottom sm:modal-middle">
     <div class="modal-box">
 
-        <h1>Entry #{{id() || "New Entry"}}</h1>
+        <h1 class="">Entry #{{id() || "New Entry"}}</h1>
         
             <label class="input">
                 <span class="label w-20">Start</span>
@@ -36,8 +36,8 @@
         
         <hr>
         
-        <button class="btn" type="button" (click)="onDelete()">Delete</button>
-        <button class="btn" type="button" (click)="onClose()">Close</button>
-        <button class="btn" type="button" (click)="onSave()">Save</button>
+        <button class="btn btn-soft btn-warning" type="button" (click)="onDelete()">Delete</button>
+        <button class="btn btn-soft" type="button" (click)="onClose()">Close</button>
+        <button class="btn btn-soft btn-success" type="button" (click)="onSave()">Save</button>
     </div>
 </dialog>

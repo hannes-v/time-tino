@@ -7,5 +7,5 @@
     <p>Duration: {{ duration ? (duration / 1000 / 60 | number:'1.0-0') + ' minutes' : 'Ongoing' }}</p>
   </div>
 
-  <button type="button" class="btn btn-soft"><a [routerLink]="['/delete', item.id]">show dialog</a></button>
+  <button type="button" class="btn btn-soft"><a [routerLink]="['/delete', item.id]">edit</a></button>
 </li>

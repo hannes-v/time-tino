@@ -9,7 +9,7 @@ import { calculateItemDuration } from "../item-utils";
 	standalone: true,
 	imports: [CommonModule, RouterLink],
 	templateUrl: "./listentry.html",
-	styleUrl: "./listentry.css",
+	styleUrls: [],
 })
 export class Listentry {
 	editOverlayVisible: boolean = false;
