@@ -13,9 +13,10 @@ import {
 import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { catchError, type Observable, of, switchMap } from "rxjs";
-import type { Item } from "../item";
+import { MockItemService } from "../../../core/providers/MockItemService";
 // biome-ignore lint/style/useImportType: <explanation>
-import { ItemService } from "../item-utils";
+import { PythonItemService } from "../../../core/providers/PythonItemService";
+import type { Item } from "../../models/Item";
 
 @Component({
 	selector: "app-overlay",
@@ -26,7 +27,7 @@ import { ItemService } from "../item-utils";
 })
 export class Overlay implements OnDestroy {
 	// Services
-	private itemService = inject(ItemService);
+	private itemService = inject(MockItemService);
 	private router = inject(Router);
 
 	// Inputs

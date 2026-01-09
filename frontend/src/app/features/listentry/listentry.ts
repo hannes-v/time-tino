@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, inject } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
-import type { Item } from "../item";
-import { calculateItemDuration } from "../item-utils";
+import { calculateItemDuration } from "../../core/providers/PythonItemService";
+import type { Item } from "../../shared/models/Item";
 
 @Component({
 	selector: "app-listentry",

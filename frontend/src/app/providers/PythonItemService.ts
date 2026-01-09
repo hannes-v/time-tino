@@ -3,33 +3,25 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import type { Observable } from "rxjs";
 import { map, of } from "rxjs";
-import type { Item } from "./item";
+import type { ItemServiceModel } from "../core/providers/ItemService.model";
+import type { Item } from "../shared/models/Item";
 
 export function calculateItemDuration(item: Item): number | null {
 	if (!item.endedAt) {
 		return null;
 	}
-	return item.endedAt.getTime() - item.startedAt.getTime();
+	return item.endedAt - item.startedAt;
 }
 
 @Injectable({ providedIn: "root" })
-export class ItemService {
+export class ItemService implements ItemServiceModel {
 	private apiUrl = "/items/";
 
 	constructor(private http: HttpClient) {}
 
-	getItems(): Observable<Item[]> {
-		return of([
-			{ id: 1, tag: "Sample Item", startedAt: new Date(), endedAt: new Date() },
-			{
-				id: 2,
-				tag: "Another Item",
-				startedAt: new Date(),
-				endedAt: null,
-			},
-		]);
-	}
-
+	/**
+	 * @deprecated all Items should be fetched via getItems()
+	 */
 	getItemById(id: number): Observable<Item> {
 		return this.http.get<Item>(`${this.apiUrl}${id}/`);
 	}
@@ -39,21 +31,17 @@ export class ItemService {
 	}
 
 	public createItem(tag: string): Observable<Item> {
-		//creating an object with the matching tag
 		const newItem: Partial<Item> = {
 			tag: tag,
-			startedAt: Date.now(),
 		};
-
-		// returning the observable
 		return this.http.post<Item>(this.apiUrl, newItem);
 	}
 
-	// getItems() {
-	// 	return this.http.get<Item[]>(this.apiUrl);
-	// }
+	public getItems() {
+		return this.http.get<Item[]>(this.apiUrl);
+	}
 
-	deleteItem(item: Item): Observable<boolean> {
+	public deleteItem(item: Item): Observable<boolean> {
 		return this.http
 			.delete(`${this.apiUrl}${item.id}/`, {
 				observe: "response", // collecting the whole response bject

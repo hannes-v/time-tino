@@ -5,12 +5,13 @@ import {
 	RouterLinkWithHref,
 	RouterOutlet,
 } from "@angular/router";
-import type { Item } from "./item";
 // biome-ignore lint/style/useImportType: <explanation>
-import { ItemService } from "./item-utils";
-import { Listentry } from "./listentry/listentry";
-import { Overlay } from "./overlay/overlay";
-import { Timeinput } from "./timeinput/timeinput";
+import { MockItemService } from "./core/providers/MockItemService";
+// biome-ignore lint/style/useImportType: <explanation>
+import { Listentry } from "./features/listentry/listentry";
+import { Timeinput } from "./features/timeinput/timeinput";
+import { Overlay } from "./shared/components/overlay/overlay";
+import type { Item } from "./shared/models/Item";
 
 @Component({
 	selector: "app-root",
@@ -29,7 +30,7 @@ export class App {
 	protected readonly title = signal("time-tino");
 	router = inject(Router);
 
-	constructor(private itemService: ItemService) {}
+	constructor(private itemService: MockItemService) {}
 	allItems = signal<Item[]>([]);
 
 	ngOnInit(): void {

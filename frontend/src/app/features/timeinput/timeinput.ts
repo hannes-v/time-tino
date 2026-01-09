@@ -1,7 +1,8 @@
 import { Component, inject, type OnDestroy, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import type { Item } from "../item";
-import { ItemService } from "../item-utils";
+import { MockItemService } from "../../core/providers/MockItemService";
+import { PythonItemService } from "../../core/providers/PythonItemService";
+import type { Item } from "../../shared/models/Item";
 
 @Component({
 	selector: "app-timeinput",
@@ -11,7 +12,7 @@ import { ItemService } from "../item-utils";
 	styleUrls: [],
 })
 export class Timeinput implements OnDestroy {
-	private itemService = inject(ItemService);
+	private itemService = inject(MockItemService);
 
 	tags = ["work", "exercise", "leisure", "other"];
 	selectedTag: string = this.tags[0];
