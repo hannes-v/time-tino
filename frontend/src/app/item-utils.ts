@@ -2,7 +2,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import type { Observable } from "rxjs";
-import { of } from "rxjs";
+import { map, of } from "rxjs";
 import type { Item } from "./item";
 
 export function calculateItemDuration(item: Item): number | null {
@@ -31,12 +31,7 @@ export class ItemService {
 	}
 
 	getItemById(id: number): Observable<Item> {
-		return of({
-			id: 1,
-			tag: "Sample Item",
-			startedAt: new Date(),
-			endedAt: new Date(),
-		});
+		return this.http.get<Item>(`${this.apiUrl}${id}/`);
 	}
 
 	updateItem(item: Item): Observable<Item> {
@@ -58,9 +53,11 @@ export class ItemService {
 	// 	return this.http.get<Item[]>(this.apiUrl);
 	// }
 
-	deleteItem(item: Item): Observable<void> {
-		// TODO: Implement deleteItem method
-		throw new Error("Method not implemented.");
-		// return this.http.delete<void>(`${this.apiUrl}${id}/`);
+	deleteItem(item: Item): Observable<boolean> {
+		return this.http
+			.delete(`${this.apiUrl}${item.id}/`, {
+				observe: "response", // collecting the whole response bject
+			})
+			.pipe(map((response) => response.status === 204));
 	}
 }
