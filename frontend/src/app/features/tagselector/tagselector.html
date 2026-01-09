@@ -1,0 +1,27 @@
+<div class="tag-container">
+  <div class="tags">
+    @for (tag of tags(); track tag) {
+      <span class="tag-chip">
+        {{ tag }}
+        <button (click)="onRemove(tag)" type="button" class="remove-btn">×</button>
+      </span>
+    }
+  </div>
+
+  <div class="input-area">
+    <input 
+      [(ngModel)]="newTagName" 
+      (keyup.enter)="onAdd()" 
+      placeholder="Neuer Tag..."
+    />
+    <button (click)="onAdd()" [disabled]="!newTagName.trim()">Hinzufügen</button>
+  </div>
+</div>
+
+<!-- usage like: -->
+<!-- <app-tag-selector 
+  [tags]="currentTags()" 
+  (tagAdded)="addNewTag($event)"
+  (tagRemoved)="deleteTag($event)">
+  (tagSelected)="selectTag($event)">
+</app-tag-selector> -->
