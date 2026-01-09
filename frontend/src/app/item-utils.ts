@@ -43,6 +43,17 @@ export class ItemService {
 		return of(item);
 	}
 
+	public createItem(tag: string): Observable<Item> {
+		//creating an object with the matching tag
+		const newItem: Partial<Item> = {
+			tag: tag,
+			startedAt: Date.now(),
+		};
+
+		// returning the observable
+		return this.http.post<Item>(this.apiUrl, newItem);
+	}
+
 	// getItems() {
 	// 	return this.http.get<Item[]>(this.apiUrl);
 	// }

@@ -1,7 +1,7 @@
-import { type HttpClient, HttpClientModule } from "@angular/common/http";
-import { Component } from "@angular/core";
+import { Component, inject, type OnDestroy, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { timer } from "rxjs";
+import type { Item } from "../item";
+import { ItemService } from "../item-utils";
 
 @Component({
 	selector: "app-timeinput",
@@ -10,32 +10,70 @@ import { timer } from "rxjs";
 	templateUrl: "./timeinput.html",
 	styleUrls: [],
 })
-export class Timeinput {
-	private tags = ["work", "exercise", "leisure", "other"];
-	selectedTag: string = "work";
-	timerRunning: boolean = false;
+export class Timeinput implements OnDestroy {
+	private itemService = inject(ItemService);
 
-	getTags(): string[] {
-		return this.tags;
+	tags = ["work", "exercise", "leisure", "other"];
+	selectedTag: string = this.tags[0];
+	elapsedSeconds = signal<number>(0);
+	private startTime: number | null = null;
+	isRunning = signal<boolean>(false);
+
+	currentItem: Item | null = null;
+
+	startDisplayTimer(): void {
+		if (this.isRunning()) {
+			setInterval(() => {
+				if (this.startTime) {
+					const now = Date.now();
+					this.elapsedSeconds.set(this.timeElapsed(this.startTime, now));
+				}
+			}, 1000);
+		}
 	}
 
-	timerButtonClicked(): void {
-		this.timerRunning = !this.timerRunning;
-		if (this.timerRunning) {
-			console.log("Timer started for tag:", this.selectedTag);
-		} else {
-			console.log("Timer stopped");
+	start(): void {
+		this.itemService.createItem(this.selectedTag).subscribe({
+			next: (response) => {
+				console.log("Timer started:", response);
+				this.currentItem = response;
+				this.isRunning.set(true);
+
+				this.startDisplayTimer();
+			},
+			error: (err) => console.error("Backend Error:", err),
+		});
+	}
+
+	stop(): void {
+		if (!this.currentItem) return;
+
+		this.isRunning.set(false);
+		const endTime = Date.now();
+
+		this.itemService
+			.updateItem({ ...this.currentItem, endedAt: endTime })
+			.subscribe({
+				next: (response) => {
+					console.log("Timer stopped:", response);
+				},
+			});
+	}
+
+	reset() {
+		this.stop();
+		this.elapsedSeconds.set(0);
+		this.startTime = null;
+	}
+
+	timeElapsed = (start: number, end: number): number => {
+		if (start && end) {
+			return Math.floor((end - start) / 1000);
 		}
-		// this.http
-		// 	.post("http://127.0.0.1:8080/items/", { tag: this.selectedTag })
-		// 	.subscribe({
-		// 		next: (response) => {
-		// 			console.log("Timer started:", response);
-		// 			this.timerRunning = true;
-		// 		},
-		// 		error: (error) => {
-		// 			console.error("Error starting timer:", error);
-		// 		},
-		// 	});
+		return 0;
+	};
+
+	ngOnDestroy(): void {
+		this.stop();
 	}
 }

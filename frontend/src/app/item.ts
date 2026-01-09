@@ -4,6 +4,6 @@
 export interface Item {
 	id: number;
 	tag: string;
-	startedAt: Date;
-	endedAt: Date | null;
+	startedAt: number;
+	endedAt?: number;
 }
