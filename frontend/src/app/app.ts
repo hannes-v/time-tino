@@ -62,6 +62,11 @@ export class App {
 		});
 	}
 
+	openMoal() {
+		console.log("Opening modal");
+		this.router.navigate([{ outlets: { modal: ["modal/add-friend"] } }]);
+	}
+
 	closethatDialog() {
 		console.log("Closing dialog");
 		this.router.navigate(["/"]);

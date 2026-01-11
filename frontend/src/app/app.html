@@ -7,7 +7,7 @@
   }
 </ul>
 
-<app-tagselector [options]="randomTags()" (tagAdded)="onTagAdded($event)" (tagSelected)="onTagSelected($event)" (tagRemoved)="onTagRemoved($event)"></app-tagselector>
-  
+<!-- <app-tagselector [options]="randomTags()" (tagAdded)="onTagAdded($event)" (tagSelected)="onTagSelected($event)" (tagRemoved)="onTagRemoved($event)"></app-tagselector> -->
+<button (click)="openMoal()"></button>
 <router-outlet></router-outlet>
 <router-outlet name="modal"></router-outlet>
