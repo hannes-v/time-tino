@@ -1,22 +1,57 @@
-<div class="tag-container">
-  <div class="tags">
-    @for (tag of tags(); track tag) {
-      <span class="tag-chip">
-        {{ tag }}
-        <button (click)="onRemove(tag)" type="button" class="remove-btn">×</button>
-      </span>
-    }
-  </div>
+<h1>Tag Selector Component</h1>
 
-  <div class="input-area">
+<div class="card bg-base-200">
+    <div class="w-100">
+
+        <ul class="menu w-100">
+            @for (option of options(); track option) {
+                    <li class="swap-off" [class]="option === selectedOptionSignal() ? 'menu-active' : ''" (click)="onSelect(option)">
+                        <div class="flex-row justify-between">
+                            <input type="checkbox" #editMode class="hidden" checked />
+                            <input type="text" class="input" [value]="option" [disabled]="editMode.checked"/>
+
+                            <div class="flex-row">
+                                <label class="swap swap-rotate m-1" [class]="!editMode.checked ? 'swap-active' : ''">
+                                    <a class="swap-off" (click)="editMode.click()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                    </a>
+                                    <a class="swap-on" (click)="editMode.click()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                        </svg>
+                                    </a>
+                                </label>
+                                <button class="btn btn-xs mr-2 btn-outline m-1" (click)="onRemove(option); $event.stopPropagation();">delete</button>
+                            </div>
+                        </div>
+                    </li>
+            }
+        </ul>
+        
+        <div class="join w-100">
+            <input
+            #newTagInput
+            type="text"
+            placeholder="New Tag"
+            class="input input-bordered join-item"
+            (keyup.enter)="onAdd(newTagInput.value); newTagInput.value=''"
+            />
+            <button class="btn btn-outline join-item" (click)="onAdd(newTagInput.value); newTagInput.value=''">Add<kbd class="kbd">⏎</kbd></button>
+        </div>
+    </div>
+</div>
+    
+  <!-- <div class="input-area">
     <input 
       [(ngModel)]="newTagName" 
       (keyup.enter)="onAdd()" 
       placeholder="Neuer Tag..."
     />
     <button (click)="onAdd()" [disabled]="!newTagName.trim()">Hinzufügen</button>
-  </div>
-</div>
+  </div> -->
+
 
 <!-- usage like: -->
 <!-- <app-tag-selector 

@@ -1,4 +1,4 @@
-import { Component, input, output } from "@angular/core";
+import { Component, input, output, signal } from "@angular/core";
 
 @Component({
 	selector: "app-tagselector",
@@ -7,19 +7,28 @@ import { Component, input, output } from "@angular/core";
 	styleUrls: [],
 })
 export class Tagselector {
-	protected readonly options = input.required<string[]>();
+	readonly options = input.required<string[]>();
+
+	selectedOptionSignal = signal<string | null>(null);
 
 	tagAdded = output<string>();
 	tagRemoved = output<string>();
+	selectedOption = output<string>();
 
 	newTagName: string = "";
 
-	onAdd() {
-		const trimmedTag = this.newTagName.trim();
-		if (trimmedTag) {
-			this.tagAdded.emit(trimmedTag);
+	onAdd(value?: string) {
+		console.log("onAdd called with value:", value);
+		const name = (value ?? this.newTagName).trim();
+		if (name) {
+			this.tagAdded.emit(name);
 			this.newTagName = "";
 		}
+	}
+
+	onSelect(tag: string) {
+		this.selectedOptionSignal.set(tag);
+		this.selectedOption.emit(tag);
 	}
 
 	onRemove(tag: string) {
