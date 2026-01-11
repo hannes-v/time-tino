@@ -1,1 +1,11 @@
-<p>tagselector-wrapper works!</p>
+<dialog #appDialog class="modal modal-bottom sm:modal-middle" open>
+    <div class="modal-box">
+
+        <app-tagselector [options]="randomTags()" (tagAdded)="onTagAdded($event)" (selectedOption)="onTagSelected($event)" (tagRemoved)="onTagRemoved($event)"></app-tagselector>
+
+
+
+        <button class="btn btn-soft" type="button" (click)="onClose()">Close</button>
+    </div>
+</dialog>
+

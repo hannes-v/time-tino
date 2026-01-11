@@ -2,11 +2,9 @@
   <div class="card-body">
     <form>
     <label for="tags">Choose a tag to work on:</label>
-    <select name="tags" id="tags" [(ngModel)]="selectedTag">
-      @for(tag of tags; track tag) {
-        <option value="{{ tag }}">{{ tag }}</option>
-      }
-    </select>
+    <h3>{{ selectedTagXXX }}</h3>
+    <button (click)="openTagSelector()" class="btn btn-xs btn-outline ml-2 mb-2">Manage Tags</button>
+    
     <small>Current: {{ elapsedSeconds() }}s</small>
   </form>
     <div class="justify-end card-actions">

@@ -27,6 +27,7 @@ export class Tagselector {
 	}
 
 	onSelect(tag: string) {
+		console.log("onSelect called with tag:", tag);
 		this.selectedOptionSignal.set(tag);
 		this.selectedOption.emit(tag);
 	}

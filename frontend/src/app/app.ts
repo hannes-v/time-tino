@@ -35,21 +35,6 @@ export class App {
 	constructor(private itemService: MockItemService) {}
 	allItems = signal<Item[]>([]);
 
-	randomTags = signal<string[]>(["work", "exercise", "leisure", "other"]);
-
-	onTagAdded = (tag: string) => {
-		console.log("Tag added in App component:", typeof tag);
-		if (!this.randomTags().includes(tag)) {
-			this.randomTags.set([...this.randomTags(), tag]);
-		}
-	};
-	onTagRemoved = (tag: string) => {
-		this.randomTags.set(this.randomTags().filter((t) => t !== tag));
-	};
-	onTagSelected = (tag: any) => {
-		console.log("Tag selected in App component:", tag);
-	};
-
 	ngOnInit(): void {
 		this.itemService.getItems().subscribe({
 			next: (items) => {
