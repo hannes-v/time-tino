@@ -1,14 +1,13 @@
-<div class="card w-96 card-lg shadow-sm" [class.bg-green-900]="isRunning()" [class.bg-amber-900]="!isRunning()">
-  <div class="card-body">
-    <form>
-    <label for="tags">Choose a tag to work on:</label>
-    <h3>{{ selectedTagXXX }}</h3>
-    <button (click)="openTagSelector()" class="btn btn-xs btn-outline ml-2 mb-2">Manage Tags</button>
-    
-    <small>Current: {{ elapsedSeconds() }}s</small>
-  </form>
-    <div class="justify-end card-actions">
+<div class="navbar shadow-sm transition duration-500" [class.bg-green-900]="isRunning()" [class.bg-amber-900]="!isRunning()">
+  <div class="navbar-start">
+    <form class="flex items-center">
+      <label for="tags">Choose a tag to work on:</label>
+      <button (click)="openTagSelector()" class="btn btn-xs btn-outline ml-2 mb-2">{{selectedTagXXX}}</button>
+      <p>.  </p>
+     <small>Current: {{ elapsedSeconds() }}s</small>
+    </form>
+</div>
+    <div class="navbar-end">
       <button type="button" (click)="isRunning() ? stop() : start()" class="btn btn-secondary">{{ isRunning() ? "Stop Timer" : "Start New Timer" }}</button>
     </div>
-  </div>
 </div>
